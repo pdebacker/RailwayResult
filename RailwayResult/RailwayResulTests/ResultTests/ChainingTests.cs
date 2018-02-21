@@ -321,7 +321,7 @@ namespace RailwayResultTests.ResultTests
             Result<Customer> result = Result<Offer>.ToResult(
                     Repository.GetOffer(Const.OfferId))
                 .OnSuccess(offer => new Customer())
-                .OnSuccess<Customer>(customer => Result<Customer>.ToResult(new Customer() { Id = 500 }));
+                .OnSuccess(customer => Result<Customer>.ToResult(new Customer() { Id = 500 }));
 
             result.ReturnValue.Id.Should().Be(500);
         }
@@ -395,7 +395,7 @@ namespace RailwayResultTests.ResultTests
                     () => Repository.GetOffer(Const.ExceptionOfferId))
                 .Continue(
                     offer => Repository.GetCustomer(offer.CustomerId),
-                    error => logOutput = Logger.LogMessage(error.ToString()));
+                    error => Logger.LogMessage(error.ToString()));
 
             result.IsSuccess.Should().BeFalse();
             logOutput.Should().NotBeNullOrEmpty();

@@ -11,6 +11,10 @@ namespace Railway.Result
             return Result<TReturn>.ToResult(value);
         }
 
+        public static Result<bool> FromBool(this bool value)
+        {
+            return Result<bool>.FromBool(value);
+        }
 
         #region Linq
         // SelectMany must have the following signature:
@@ -224,41 +228,45 @@ namespace Railway.Result
         #endregion OnException
         #region OnSuccess
 
-        public static Result<TReturn> OnSuccess<TReturn>(this Result<TReturn> result,
-            Func<TReturn, Result<TReturn>> evaluator)
-        {
-            try
-            {
-                if (result.IsSuccess)
-                {
-                    var returnValue = evaluator(result.ReturnValue);
-                    return returnValue;
-                }
-                return result;
-            }
-            catch (Exception ex)
-            {
-                return Result<TReturn>.Failed(ex, ex.Message, result);
-            }
-        }
+        // Obsolete
+        //
+        //public static Result<TReturn> OnSuccess<TReturn>(this Result<TReturn> result,
+        //    Func<TReturn, Result<TReturn>> evaluator)
+        //{
+        //    try
+        //    {
+        //        if (result.IsSuccess)
+        //        {
+        //            var returnValue = evaluator(result.ReturnValue);
+        //            return returnValue;
+        //        }
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Result<TReturn>.Failed(ex, ex.Message, result);
+        //    }
+        //}
 
-        public static Result<TReturn> OnSuccess<TReturn>(this Result<TReturn> result,
-            Func<TReturn, TReturn> evaluator)
-        {
-            try
-            {
-                if (result.IsSuccess)
-                {
-                    var returnValue = evaluator(result.ReturnValue);
-                    return Result<TReturn>.ToResult(returnValue);
-                }
-                return result;
-            }
-            catch (Exception ex)
-            {
-                return Result<TReturn>.Failed(ex, ex.Message, result);
-            }
-        }
+        // Obsolete: use Result<TOut> OnSuccess<TReturn, TOut>(this Result<TReturn> result, Func<TReturn, TOut> evaluator)
+        //
+        //public static Result<TReturn> OnSuccess<TReturn>(this Result<TReturn> result,
+        //    Func<TReturn, TReturn> evaluator)
+        //{
+        //    try
+        //    {
+        //        if (result.IsSuccess)
+        //        {
+        //            var returnValue = evaluator(result.ReturnValue);
+        //            return Result<TReturn>.ToResult(returnValue);
+        //        }
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Result<TReturn>.Failed(ex, ex.Message, result);
+        //    }
+        //}
 
         public static Result<TOut> OnSuccess<TReturn, TOut>(this Result<TReturn> result,
               Func<TReturn, Result<TOut>> evaluator)

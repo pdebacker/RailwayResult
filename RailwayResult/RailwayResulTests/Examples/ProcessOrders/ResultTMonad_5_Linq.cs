@@ -12,9 +12,9 @@ namespace RailwayResultTests.Examples.ProcessOrders
         [TestInitialize]
         public void TestSetup()
         {
-            //var simpleLogger = new SimpleLogger(@"c:\tmp\log.txt");
-            //simpleLogger.ClearLog();
-            //ResultLogger.Logger = simpleLogger;
+            var simpleLogger = new SimpleLogger(@"c:\tmp\log.txt");
+            simpleLogger.ClearLog();
+            ResultLogger.Logger = simpleLogger;
         }
 
         [TestMethod]

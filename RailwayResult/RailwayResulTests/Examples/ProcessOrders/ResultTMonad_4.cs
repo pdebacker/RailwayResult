@@ -9,6 +9,7 @@ namespace RailwayResultTests.Examples.ProcessOrders
     [TestClass]
     public class ResultTMonad_4
     {
+
         [TestMethod]
         public void ExampleOrderProcessing_Monad_2()
         {

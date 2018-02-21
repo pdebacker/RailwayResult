@@ -178,8 +178,8 @@ namespace RailwayResultTests.Examples
             switch (recipient)
             {
                 case "valid@mail.com": return true;
-                case "invalid@mail.com": return false;
-                case "exception": throw new SmptException("SmptService Exception");
+                case "failed@mail.com": return false;
+                case "exception@mail.com": throw new SmptException("SmptService Exception");
             }
             throw new SmptException("don't know what to do");
         }
@@ -192,9 +192,9 @@ namespace RailwayResultTests.Examples
 
     public static class Logger
     {
-        public static string LogMessage(string message)
+        public static void LogMessage(string message)
         {
-            return message;
+            //NOP;
         }
     }
     public static class Repository
@@ -211,7 +211,7 @@ namespace RailwayResultTests.Examples
 
         public static bool UpdateCustomer(Customer customer)
         {
-            throw new RepositoryException("Entity validation error");
+            //throw new RepositoryException("Entity validation error");
             return true;
         }
 
@@ -350,10 +350,10 @@ namespace RailwayResultTests.Examples
                     customer.EmailAddress = null;
                     break;
                 case Const.InvalidMailCustomerId:
-                    customer.EmailAddress = "invalid@mail.com";
+                    customer.EmailAddress = "failed@mail.com";
                     break;
                 case Const.ExcptionMailCustomerId:
-                    customer.EmailAddress = "exception";
+                    customer.EmailAddress = "exception@mail.com";
                     break;
                 case Const.CustomerWithLowLimitId:
                     customer.OrderLimit = 10;
