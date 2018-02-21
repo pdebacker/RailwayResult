@@ -48,6 +48,7 @@ artifacts/
 *_i.c
 *_p.c
 *_i.h
+*.docx
 *.ilk
 *.meta
 *.obj
