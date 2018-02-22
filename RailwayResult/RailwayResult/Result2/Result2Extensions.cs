@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Railway.Result;
 
 namespace Railway.Result2
 {
@@ -99,6 +100,51 @@ namespace Railway.Result2
 
         #endregion
         #region If    
+
+        public static Result2<TOut, TFailure> Continue<TSuccess, TOut, TFailure>(
+            this Result2<TSuccess, TFailure> result,
+            Func<TSuccess, Result2<TOut, TFailure>> onsucces,
+            Func<TFailure, Result2<TOut, TFailure>> onfailure)
+        {
+            if (onsucces==null)
+                throw  new ArgumentNullException(nameof(onsucces));
+            if (onfailure == null)
+                throw new ArgumentNullException(nameof(onfailure));
+
+            if (result.IsSuccess)
+                return result.OnSuccess(onsucces);
+            
+                return onfailure(result.FailureResult);
+        }
+
+        public static Result2<TOut, TFailure> Continue<TSuccess, TOut, TFailure>(
+            this Result2<TSuccess, TFailure> result,
+            Func<TSuccess, TOut> onsucces,
+            Action<TFailure> onfailure)
+        {
+            if (onsucces == null)
+                throw new ArgumentNullException(nameof(onsucces));
+            if (onfailure == null)
+                throw new ArgumentNullException(nameof(onfailure));
+
+            if (result.IsSuccess)
+                return result.OnSuccess(onsucces);
+
+            onfailure(result.FailureResult);
+            return Result2<TOut, TFailure>.Failed(result.FailureResult);
+        }
+
+        public static Result2<TReturn, TFailure> ContinueIf<TReturn, TFailure>(
+            this Result2<TReturn, TFailure> result,
+            Func<TReturn, bool> predicate,
+            Func<TReturn, Result2<TReturn, TFailure>> then)
+        {
+            if (result.IsSuccess && predicate(result.SuccessResult))
+                return then(result.SuccessResult);
+
+            return result;
+        }
+
         // If predicate is true, transforms Success<T1> to Success<T2>, else pass failure F
         public static Result2<TOut, TFailure> If<TSuccess, TOut, TFailure>(
             this Result2<TSuccess, TFailure> input,
