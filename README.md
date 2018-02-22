@@ -268,16 +268,16 @@ The Finally and Throw methods are only available for the __Result__ monad.
 
 Both the __Result__ and __Result2__ monads provide a SelectMany extension method which will allow the monad to be used with Linq. An example:
 
-			var result =
-                from product in GetProductResult(productId)
-                from order in GetOrderResult(orderId)
-                from customer in GetCustomerResult(order.CustomerId)
-                from added in AddProductToCustomerOrder(order, customer, product)
-                from ok in UpdateCustomerOrder(added, order)
-                select ok;
-			
-			if (result.IsFailure)
-				throw new ApplicationException(...);
+		var result =
+			from product in GetProductResult(productId)
+			from order in GetOrderResult(orderId)
+			from customer in GetCustomerResult(order.CustomerId)
+			from added in AddProductToCustomerOrder(order, customer, product)
+			from ok in UpdateCustomerOrder(added, order)
+			select ok;
+
+		if (result.IsFailure)
+			throw new ApplicationException(...);
 				
 
 SelectMany:
