@@ -1,13 +1,10 @@
 # Railway Programming in C#.
-<span>
 Inspired by the Railway programming talk from <a href="https://vimeo.com/113707214">Scott Wlaschin</a> and the presentation from <a href="https://youtu.be/uM906cqdFWE ">Marcus Denny</a> I decided to create my own C# implementation, just for fun and to learn. 
-</span>
 
 
-
-This project contains two approaches how to handle a two track result: 
-<span>`Result<TSuccess>` and </span>
-<span>`Result2<TSuccess, TFailure>` </span>
+This project contains two implementations of a two-track result: <br>
+ - `Result<TSuccess>` 
+ - `Result2<TSuccess, TFailure>`
 
 
 ## The Railway programming concept ##
