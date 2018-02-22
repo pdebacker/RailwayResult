@@ -3,6 +3,7 @@
 Inspired by the Railway programming talk from <a href="https://vimeo.com/113707214">Scott Wlaschin</a> and the presentation from <a href="https://youtu.be/uM906cqdFWE ">Marcus Denny</a> I decided to create my own C# implementation, just for fun and to learn. 
 </span>
 
+
 This project contains two approaches how to handle a two track result: 
 `Result<TSuccess>` and 
 `Result2<TSuccess, TFailure>`
