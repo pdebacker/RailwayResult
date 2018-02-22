@@ -4,9 +4,10 @@ Inspired by the Railway programming talk from <a href="https://vimeo.com/1137072
 </span>
 
 
+
 This project contains two approaches how to handle a two track result: 
-`Result<TSuccess>` and 
-`Result2<TSuccess, TFailure>`
+<span>`Result<TSuccess>` and </span>
+<span>`Result2<TSuccess, TFailure>` </span>
 
 
 ## The Railway programming concept ##
