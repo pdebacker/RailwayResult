@@ -6,6 +6,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RailwayResultTests.Examples;
 using Railway.Result2;
+using RailwayResultTests.StubDomain;
 
 namespace RailwayResultTests.Result2Tests
 {
@@ -193,8 +194,6 @@ namespace RailwayResultTests.Result2Tests
         {
             Order order = null;
             Customer customer = null;
-            Product product = null;
-
     
             var result2 = GetOrderResult(orderId)
                 .OnSuccess(o => order = o)

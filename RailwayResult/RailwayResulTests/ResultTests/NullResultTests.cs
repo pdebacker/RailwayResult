@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RailwayResultTests.Examples;
 using Railway.Result;
+using RailwayResultTests.StubDomain;
 
 namespace RailwayResultTests.ResultTests
 {
@@ -39,7 +40,7 @@ namespace RailwayResultTests.ResultTests
         public void GivenNotCustomer_WhenNullDelegate_ExpectNewCustomer()
         {
             Result<Customer> result =
-                Result<Customer>.ToResult(Stub.GetNullCustomer(123))
+                Result<Customer>.ToResult(Repository.GetCustomer(Const.NullCustomerId))
                     .OnNull(r => new Customer(){Name = "Bar"});
             result.ReturnValue.Name.Should().Be("Bar");
         }
@@ -48,7 +49,7 @@ namespace RailwayResultTests.ResultTests
         public void GivenCustomerException_WhenNullDelegate_ExpectFailure()
         {
             Result<Customer> result =
-                Result<Customer>.ToResult(() => Stub.GetCustomerThrows(123))
+                Result<Customer>.ToResult(() => Repository.GetCustomer(Const.ExceptionCustomerId))
                 .OnNull(r => new Customer() { Name = "Bar" });
 
             result.IsFailure.Should().Be(true);
@@ -60,7 +61,7 @@ namespace RailwayResultTests.ResultTests
         public void GivenCustomerResult_WhenNullDelegate_ExpectSkipDelegate()
         {
             Result<Customer> result =
-                Result<Customer>.ToResult(() => Stub.GetCustomer(123))
+                Result<Customer>.ToResult(() => Repository.GetCustomer(Const.CustomerId))
                     .OnNull(r => new Customer() { Name = "Bar" });
 
             result.ReturnValue.Name.Should().Be("Foo");

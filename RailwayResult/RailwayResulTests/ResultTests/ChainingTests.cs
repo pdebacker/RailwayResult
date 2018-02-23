@@ -3,6 +3,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RailwayResultTests.Examples;
 using Railway.Result;
+using RailwayResultTests.StubDomain;
 
 namespace RailwayResultTests.ResultTests
 {
@@ -395,7 +396,7 @@ namespace RailwayResultTests.ResultTests
                     () => Repository.GetOffer(Const.ExceptionOfferId))
                 .Continue(
                     offer => Repository.GetCustomer(offer.CustomerId),
-                    error => Logger.LogMessage(error.ToString()));
+                    error => { logOutput = error.ToString();});
 
             result.IsSuccess.Should().BeFalse();
             logOutput.Should().NotBeNullOrEmpty();

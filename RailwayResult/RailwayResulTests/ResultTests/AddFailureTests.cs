@@ -3,6 +3,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RailwayResultTests.Examples;
 using Railway.Result;
+using RailwayResultTests.StubDomain;
 
 namespace RailwayResultTests.ResultTests
 {

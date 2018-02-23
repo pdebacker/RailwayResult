@@ -3,6 +3,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RailwayResultTests.Examples;
 using Railway.Result;
+using RailwayResultTests.StubDomain;
 
 namespace RailwayResultTests.ResultTests
 {
@@ -13,7 +14,7 @@ namespace RailwayResultTests.ResultTests
         [TestMethod]
         public void ConstructWithNothing_ExpectIsNullFailure()
         {
-            var result = Result<Customer>.ToResult(() => Stub.GetNullCustomer(123));
+            var result = Result<Customer>.ToResult(() => Repository.GetCustomer(Const.NullCustomerId));
 
             result.IsSuccess.Should().BeFalse();
             result.IsFailure.Should().BeTrue();
@@ -88,7 +89,7 @@ namespace RailwayResultTests.ResultTests
         [TestMethod]
         public void ConstructWithCustomer_ExpectSuccessAndValue()
         {
-            var result = Result<Customer>.ToResult(Stub.GetCustomer(123));
+            var result = Result<Customer>.ToResult(Repository.GetCustomer(Const.CustomerId));
 
             result.IsSuccess.Should().BeTrue();
             result.IsFailure.Should().BeFalse();
@@ -99,7 +100,7 @@ namespace RailwayResultTests.ResultTests
         [TestMethod]
         public void ConstructWithCustomerDelegate_ExpectSuccessAndValue()
         {
-            var result = Result<Customer>.ToResult(() => Stub.GetCustomer(123));
+            var result = Result<Customer>.ToResult(() => Repository.GetCustomer(Const.CustomerId));
 
             result.IsSuccess.Should().BeTrue();
             result.IsFailure.Should().BeFalse();
@@ -184,7 +185,7 @@ namespace RailwayResultTests.ResultTests
         [TestMethod]
         public void ConstructWithExceptionMessageAndInstance_ExpectFailureExceptionMessageAndInstance()
         {
-            var customer = Stub.GetCustomer(123);
+            var customer = Repository.GetCustomer(Const.CustomerId);
             var ex = new ApplicationException("app error");
             var result = Result<Customer>.Failed(ex, "custom message", customer);
 
@@ -212,7 +213,7 @@ namespace RailwayResultTests.ResultTests
         [TestMethod]
         public void ConstructViaToResult_FromCustomer_ExpectCustomer()
         {
-            var customer = Stub.GetCustomer(123);
+            var customer = Repository.GetCustomer(Const.CustomerId);
             Result<Customer> result = customer.ToResult();
 
             result.IsSuccess.Should().BeTrue();

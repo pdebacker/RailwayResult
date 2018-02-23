@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Railway.Result;
+using RailwayResultTests.StubDomain;
 
 namespace RailwayResultTests.Examples.UpdateOrder
 {
@@ -29,27 +30,5 @@ namespace RailwayResultTests.Examples.UpdateOrder
         }
     }
 
-    public class SimpleLogger : IResultFailureLogger
-    {
-        private static object _lock = new object();
-        private readonly string _fileName;
-
-        public SimpleLogger(string logFileName)
-        {
-            _fileName = logFileName;
-        }
-
-        public void ClearLog()
-        {
-            if (System.IO.File.Exists(_fileName))
-                System.IO.File.Delete(_fileName);
-        }
-        public void LogFailure(ResultFailure failureInfo)
-        {
-            lock (_lock)
-            {
-                System.IO.File.AppendAllText(_fileName, failureInfo.ToString());
-            }
-        }
-    }
+   
 }

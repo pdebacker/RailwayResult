@@ -3,11 +3,12 @@ using System.Text.RegularExpressions;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Railway.Result;
+using RailwayResultTests.StubDomain;
 
 namespace RailwayResultTests.Examples.Various
 {
     [TestClass]
-    public class Various
+    public class UpdateCustomerEmail
     {
         [TestInitialize]
         public void TestSetup()
@@ -66,42 +67,6 @@ namespace RailwayResultTests.Examples.Various
         {
             string body = $"Dear {customer.Name}, your email address has been changed to {customer.EmailAddress}.";
             return Result<bool>.FromBool(SmtpService.SendMail(email, "Your email address has changed", body));
-        }
-        private Customer UpdateCustomerEmailWhenDifferent(Customer customer, string newMailAddress)
-        {
-            if (!customer.EmailAddress.Equals(newMailAddress))
-            {
-                customer.EmailAddress = newMailAddress;
-                if (Repository.UpdateCustomer(customer) == false)
-                    throw new ApplicationException("failed to update customer");
-            }
-
-            return customer;
-        }
-
-        public class SimpleLogger : IResultFailureLogger
-        {
-            private static object _lock = new object();
-            private readonly string _fileName;
-
-            public SimpleLogger(string logFileName)
-            {
-                _fileName = logFileName;
-            }
-
-            public void ClearLog()
-            {
-                if (System.IO.File.Exists(_fileName))
-                    System.IO.File.Delete(_fileName);
-            }
-            public void LogFailure(ResultFailure failureInfo)
-            {
-                lock (_lock)
-                {
-                    string timeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "\r\n";
-                    System.IO.File.AppendAllText(_fileName,  timeStamp + failureInfo.ToString());
-                }
-            }
         }
 
     }
