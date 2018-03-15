@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Railway.Result;
 using RailwayResultTests.StubDomain;
+using Xunit;
 
 namespace RailwayResultTests.Examples.ProcessOrders
 {
-    [TestClass]
     public class ResultTMonad_4
     {
-
-        [TestMethod]
+        [Fact]
         public void ExampleOrderProcessing_Monad_2()
         {
             var ordersToProcess = TestSupport.GetTestOrderIds();

@@ -20,7 +20,7 @@ namespace RailwayResultTests.StubDomain
         }
     }
 
-    public class SmptException : ApplicationException
+    public class SmptException : Exception
     {
         public SmptException(string message) : base(message) { }
     }

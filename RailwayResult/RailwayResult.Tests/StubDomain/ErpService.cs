@@ -43,7 +43,7 @@ namespace RailwayResultTests.StubDomain
             public DateTime EstimatedShippingDate { get; set; }
         }
 
-        public class ErpException : ApplicationException
+        public class ErpException : Exception
         {
             public ErpException(string message) : base(message)
             {

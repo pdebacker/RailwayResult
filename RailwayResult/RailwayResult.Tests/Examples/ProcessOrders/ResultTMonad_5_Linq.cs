@@ -1,24 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Railway.Result;
 using RailwayResultTests.StubDomain;
+using Xunit;
 
 namespace RailwayResultTests.Examples.ProcessOrders
 {
-    [TestClass]
     public class ResultTMonad_5_Linq
     {
-        [TestInitialize]
-        public void TestSetup()
+        public ResultTMonad_5_Linq()
         {
             var simpleLogger = new SimpleLogger(@"c:\tmp\log.txt");
             simpleLogger.ClearLog();
             ResultLogger.Logger = simpleLogger;
         }
 
-        [TestMethod]
+        [Fact]
         public void ExampleOrderProcessing_Monad_Linq_ExtractedUpdateAndInform()
         {
             var ordersToProcess = TestSupport.GetTestOrderIds();

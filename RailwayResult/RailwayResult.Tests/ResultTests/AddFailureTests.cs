@@ -1,16 +1,14 @@
 ﻿using System;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RailwayResultTests.Examples;
 using Railway.Result;
 using RailwayResultTests.StubDomain;
+using Xunit;
 
 namespace RailwayResultTests.ResultTests
 {
-    [TestClass]
     public class AddFailureTests
     {
-        [TestMethod]
+        [Fact]
         public void GivenSuccessResult_WhenAddFailure_ThenFailureResultHasOne()
         {
             Result<Customer> result = Repository.GetCustomer(Const.CustomerId).ToResult();
@@ -22,7 +20,7 @@ namespace RailwayResultTests.ResultTests
             result.FailureInfo.Message.Should().Be("error");
         }
 
-        [TestMethod]
+        [Fact]
         public void GivenFailureResult_WhenAddFailure_ThenExpectTwoErrors()
         {
             Result<Customer> result = Repository.GetCustomer(Const.CustomerId).ToResult();

@@ -1,17 +1,15 @@
 ﻿using System;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RailwayResultTests.Examples;
 using Railway.Result;
 using RailwayResultTests.StubDomain;
+using Xunit;
 
 namespace RailwayResultTests.ResultFailureTests
 {
-    [TestClass]
     public class ConstructorTests
     {
 
-        [TestMethod]
+        [Fact]
         public void ConstructResultErrorWithType_ExpectIsNull()
         {
             var resultError = new ResultFailure(typeof(Customer));
@@ -24,7 +22,7 @@ namespace RailwayResultTests.ResultFailureTests
             resultError.StackTrace.Should().NotBeNull();
         }
 
-        [TestMethod]
+        [Fact]
         public void ConstructEmptyResultError_ExpectIsFalse()
         {
             var resultError = new ResultFailure();
@@ -36,7 +34,8 @@ namespace RailwayResultTests.ResultFailureTests
             resultError.Ex.Should().BeNull();
             resultError.StackTrace.Should().NotBeNull();
         }
-        [TestMethod]
+
+        [Fact]
         public void ConstructResultErrorWithNothing_ExpectIsFalse() 
         {
             var resultError = new ResultFailure();
@@ -49,10 +48,10 @@ namespace RailwayResultTests.ResultFailureTests
             resultError.StackTrace.Should().NotBeNull();
         }
 
-        [TestMethod]
+        [Fact]
         public void ConstructResultErrorWithException()
         {
-            var ex = new ApplicationException("test");
+            var ex = new Exception("test");
             var resultError = new ResultFailure(typeof(bool), ex);
 
             resultError.IsNull.Should().BeFalse();
@@ -63,10 +62,10 @@ namespace RailwayResultTests.ResultFailureTests
             resultError.StackTrace.Should().NotBeNull();
         }
 
-        [TestMethod]
+        [Fact]
         public void ConstructResultErrorWithExceptionMessage()
         {
-            var ex = new ApplicationException("test");
+            var ex = new Exception("test");
             var resultError = new ResultFailure(typeof(bool), ex, "Foo");
 
             resultError.IsNull.Should().BeFalse();
@@ -77,11 +76,11 @@ namespace RailwayResultTests.ResultFailureTests
             resultError.StackTrace.Should().NotBeNull();
         }
 
-        [TestMethod]
+        [Fact]
         public void ConstructResultErrorWithExceptionMessageAndObjectInstance()
         {
             var customer = new Customer() {Id = 123, Name = "FooBar", EmailAddress = "foo@bar.com"};
-            var ex = new ApplicationException("test");
+            var ex = new Exception("test");
             var resultError = new ResultFailure(typeof(Customer), ex, "Foo", customer);
 
             resultError.IsNull.Should().BeFalse();
@@ -93,7 +92,7 @@ namespace RailwayResultTests.ResultFailureTests
             resultError.StackTrace.Should().NotBeNull();
         }
 
-        [TestMethod]
+        [Fact]
         public void ConstructResultErrorWithCodeAndMessage()
         {
             var resultError = new ResultFailure(typeof(bool), 123, "Foo");
@@ -106,7 +105,7 @@ namespace RailwayResultTests.ResultFailureTests
             resultError.StackTrace.Should().NotBeNull();
         }
 
-        [TestMethod]
+        [Fact]
         public void ConstructResultErrorWithCodeMessageAndObjectInstance()
         {
             var customer = new Customer() {Id = 123, Name = "FooBar", EmailAddress = "foo@bar.com"};

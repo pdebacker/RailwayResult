@@ -1,14 +1,13 @@
 ﻿using System;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Railway.Result2;
+using Xunit;
 
 namespace RailwayResultTests.Result2Tests
 {
-    [TestClass]
     public class SelectManyTests
     {
-        [TestMethod]
+        [Fact]
         public void Result2_SelectMany_ChainSuccess2x_ExpectSuccess()
         {
             var result = from a in BoolSuccess()
@@ -19,7 +18,7 @@ namespace RailwayResultTests.Result2Tests
             result.SuccessResult.Should().Be(123);
         }
 
-        [TestMethod]
+        [Fact]
         public void Result2_SelectMany_ChainSuccess3x_ExpectSuccess()
         {
             var result = from a in BoolSuccess()
@@ -31,7 +30,7 @@ namespace RailwayResultTests.Result2Tests
             result.SuccessResult.Should().Be("foo");
         }
 
-        [TestMethod]
+        [Fact]
         public void Result2_SelectMany_ChainSuccessAndFailureFirst_ExpectFailure()
         {
             var result = from a in BoolFailure()
@@ -42,7 +41,7 @@ namespace RailwayResultTests.Result2Tests
             result.IsSuccess.Should().Be(false);
         }
 
-        [TestMethod]
+        [Fact]
         public void Result2_SelectMany_ChainSuccessAndFailureLast_ExpectFailure()
         {
             var result = from a in BoolSuccess()

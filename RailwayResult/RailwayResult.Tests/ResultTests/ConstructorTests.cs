@@ -1,17 +1,15 @@
 ﻿using System;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RailwayResultTests.Examples;
 using Railway.Result;
 using RailwayResultTests.StubDomain;
+using Xunit;
 
 namespace RailwayResultTests.ResultTests
 {
-    [TestClass]
     public class ConstructorTests
     {
 
-        [TestMethod]
+        [Fact]
         public void ConstructWithNothing_ExpectIsNullFailure()
         {
             var result = Result<Customer>.ToResult(() => Repository.GetCustomer(Const.NullCustomerId));
@@ -21,7 +19,7 @@ namespace RailwayResultTests.ResultTests
             result.FailureInfo.IsNull.Should().BeTrue();
         }
 
-        [TestMethod]
+        [Fact]
         public void ConstructWithSuccess_ExpectSuccessAndBoolValueTrue()
         {
             var result = Result<bool>.Succeeded();
@@ -32,7 +30,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Should().Be(true);
         }
 
-        [TestMethod]
+        [Fact]
         public void ConstructWithFailure_ExpectNotSuccessAndBoolValueFalse()
         {
             var result = Result<bool>.Failed();
@@ -43,7 +41,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Should().Be(false);
         }
 
-        [TestMethod]
+        [Fact]
         public void ConstructFromBool_WhenValueTrue_ExpectSuccessAndTrue()
         {
             var result = Result<bool>.ToResult(true);
@@ -53,7 +51,7 @@ namespace RailwayResultTests.ResultTests
             result.FailureInfo.Should().BeNull();
             result.ReturnValue.Should().Be(true);
         }
-        [TestMethod]
+        [Fact]
         public void ConstructFromBool_WhenValueFalse_ExpectSuccessAndFalse()
         {
             var result = Result<bool>.ToResult(false);
@@ -64,7 +62,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Should().Be(false);
         }
 
-        [TestMethod]
+        [Fact]
         public void ConstructFrom_WhenTrue_ExpectSuccessAndTrue()
         {
             var result = Result<bool>.FromBool(true);
@@ -74,7 +72,7 @@ namespace RailwayResultTests.ResultTests
             result.FailureInfo.Should().BeNull();
             result.ReturnValue.Should().Be(true);
         }
-        [TestMethod]
+        [Fact]
         public void ConstructFrom_WhenFalse_ExpectFailureAndFalse()
         {
             var result = Result<bool>.FromBool(false);
@@ -86,7 +84,7 @@ namespace RailwayResultTests.ResultTests
         }
 
 
-        [TestMethod]
+        [Fact]
         public void ConstructWithCustomer_ExpectSuccessAndValue()
         {
             var result = Result<Customer>.ToResult(Repository.GetCustomer(Const.CustomerId));
@@ -97,7 +95,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Id.Should().Be(123);
         }
 
-        [TestMethod]
+        [Fact]
         public void ConstructWithCustomerDelegate_ExpectSuccessAndValue()
         {
             var result = Result<Customer>.ToResult(() => Repository.GetCustomer(Const.CustomerId));
@@ -108,7 +106,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Id.Should().Be(123);
         }
 
-        [TestMethod]
+        [Fact]
         public void ConstructWithFailureInfo_ExpectFailureValue()
         {
             var failureInfo = new ResultFailure(typeof(Customer), - 1, "error");
@@ -124,7 +122,7 @@ namespace RailwayResultTests.ResultTests
             result.FailureInfo.Message.Should().Be("error");
         }
 
-        [TestMethod]
+        [Fact]
         public void ConstructWithFailureMessage_ExpectFailureMessage()
         {
             var result = Result<Customer>.Failed("error");
@@ -138,7 +136,7 @@ namespace RailwayResultTests.ResultTests
             result.FailureInfo.Message.Should().Be("error");
         }
 
-        [TestMethod]
+        [Fact]
         public void ConstructWithFailureCodeAndMessage_ExpectFailureCodeAndMessage()
         {
             var result = Result<Customer>.Failed(-1, "error");
@@ -152,10 +150,10 @@ namespace RailwayResultTests.ResultTests
             result.FailureInfo.Message.Should().Be("error");
         }
 
-        [TestMethod]
+        [Fact]
         public void ConstructWithException_ExpectFailureException()
         {
-            var ex = new ApplicationException("app error");
+            var ex = new Exception("app error");
             var result = Result<Customer>.Failed(ex);
 
             result.IsSuccess.Should().BeFalse();
@@ -167,10 +165,10 @@ namespace RailwayResultTests.ResultTests
             result.FailureInfo.Message.Should().Be(ex.Message);
         }
 
-        [TestMethod]
+        [Fact]
         public void ConstructWithExceptionAndMessage_ExpectFailureExceptionAndMessage()
         {
-            var ex = new ApplicationException("app error");
+            var ex = new Exception("app error");
             var result = Result<Customer>.Failed(ex, "custom message");
 
             result.IsSuccess.Should().BeFalse();
@@ -182,11 +180,11 @@ namespace RailwayResultTests.ResultTests
             result.FailureInfo.Message.Should().Be("custom message");
         }
 
-        [TestMethod]
+        [Fact]
         public void ConstructWithExceptionMessageAndInstance_ExpectFailureExceptionMessageAndInstance()
         {
             var customer = Repository.GetCustomer(Const.CustomerId);
-            var ex = new ApplicationException("app error");
+            var ex = new Exception("app error");
             var result = Result<Customer>.Failed(ex, "custom message", customer);
 
             result.IsSuccess.Should().BeFalse();
@@ -197,10 +195,10 @@ namespace RailwayResultTests.ResultTests
             result.FailureInfo.Code.Should().Be(ex.HResult);
             result.FailureInfo.Message.Should().Be("custom message");
 
-            Assert.AreSame(result.FailureInfo.Object, customer);
+            Assert.Same(result.FailureInfo.Object, customer);
         }
 
-        [TestMethod]
+        [Fact]
         public void ConstructViaToResult_FromBool_ExpectBool()
         {
             bool value = false;
@@ -210,7 +208,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Should().Be(false);
         }
 
-        [TestMethod]
+        [Fact]
         public void ConstructViaToResult_FromCustomer_ExpectCustomer()
         {
             var customer = Repository.GetCustomer(Const.CustomerId);

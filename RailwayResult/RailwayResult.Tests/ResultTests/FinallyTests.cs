@@ -1,15 +1,14 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RailwayResultTests.Examples;
 using Railway.Result;
 using RailwayResultTests.StubDomain;
+using Xunit;
 
 namespace RailwayResultTests.ResultTests
 {
-    [TestClass]
     public class FinallyTests
     {
-        [TestMethod]
+        [Fact]
         public void FinallyThrowExample()
         {
             Customer customer =
@@ -19,7 +18,7 @@ namespace RailwayResultTests.ResultTests
 
         }
 
-        [TestMethod]
+        [Fact]
         public void FinallyNullExample()
         {
             Customer customer =

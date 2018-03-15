@@ -78,7 +78,7 @@ namespace Railway.Result
             }
             catch (Exception ex)
             {
-                var b = evaluator.Method.ToString();
+                var b = evaluator.ToString();
                 return Failed(ex, ex.Message, b);
             }
         }

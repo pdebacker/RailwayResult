@@ -1,13 +1,11 @@
 ﻿using System;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RailwayResultTests.Examples;
 using Railway.Result;
 using RailwayResultTests.StubDomain;
+using Xunit;
 
 namespace RailwayResultTests.ResultTests
 {
-    [TestClass]
     public class ChainingTests
     {
         //[TestMethod]
@@ -42,23 +40,22 @@ namespace RailwayResultTests.ResultTests
         }
 
 
-        [TestMethod]
+        [Fact]
         public void NoChaining_ToResult()
         {
             Result<Offer> result = Result<Offer>.ToResult(Repository.GetOffer(Const.OfferId));
 
             result.IsSuccess.Should().BeTrue();
-            Assert.IsTrue(result.ReturnValue.GetType() == typeof(Offer));
+            Assert.True(result.ReturnValue.GetType() == typeof(Offer));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(Repository.RepositoryException))]
+        [Fact]
         public void NoChaining_ToResultException()
         {
-            Result<Offer> result = Result<Offer>.ToResult(Repository.GetOffer(Const.ExceptionOfferId));
+            Assert.Throws<Repository.RepositoryException>(()=>Result<Offer>.ToResult(Repository.GetOffer(Const.ExceptionOfferId)));
         }
 
-        [TestMethod]
+        [Fact]
         public void NoChaining_ToResultFailure()
         {
             Result<Offer> result = Result<Offer>.ToResult(
@@ -67,17 +64,17 @@ namespace RailwayResultTests.ResultTests
             result.IsException.Should().BeTrue();
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ToResult_OnSuccess()
         {
             Result<Customer> result = Result<Offer>.ToResult(Repository.GetOffer(Const.OfferId))
                 .OnSuccess(offer => Repository.GetCustomer(offer.CustomerId));
 
             result.IsSuccess.Should().BeTrue();
-            Assert.IsTrue(result.ReturnValue.GetType() == typeof(Customer));
+            Assert.True(result.ReturnValue.GetType() == typeof(Customer));
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ToResult_OnSuccess_OnSuccess()
         {
             Result<Product> result = Result<Offer>.ToResult(Repository.GetOffer(Const.OfferId))
@@ -86,10 +83,10 @@ namespace RailwayResultTests.ResultTests
 
 
             result.IsSuccess.Should().BeTrue();
-            Assert.IsTrue(result.ReturnValue.GetType() == typeof(Product));
+            Assert.True(result.ReturnValue.GetType() == typeof(Product));
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ToResult_OnSuccess_OnSuccess_OnFailure()
         {
             Result<Product> result = Result<Offer>.ToResult(Repository.GetOffer(Const.OfferId))
@@ -99,11 +96,11 @@ namespace RailwayResultTests.ResultTests
 
 
             result.IsSuccess.Should().BeTrue();
-            Assert.IsTrue(result.ReturnValue.GetType() == typeof(Product));
+            Assert.True(result.ReturnValue.GetType() == typeof(Product));
             result.ReturnValue.Name.Should().NotBe("Foo");
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ToResult_OnSuccess_OnSuccessException_OnFailure()
         {
             Result<Product> result = Result<Offer>.ToResult(Repository.GetOffer(Const.OfferId))
@@ -113,11 +110,11 @@ namespace RailwayResultTests.ResultTests
 
 
             result.IsSuccess.Should().BeTrue();
-            Assert.IsTrue(result.ReturnValue.GetType() == typeof(Product));
+            Assert.True(result.ReturnValue.GetType() == typeof(Product));
             result.ReturnValue.Name.Should().Be("Foo");
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ToResult_OnSuccess_OnSuccessException()
         {
             Result<Product> result = Result<Offer>.ToResult(Repository.GetOffer(Const.OfferId))
@@ -128,7 +125,7 @@ namespace RailwayResultTests.ResultTests
             result.IsException.Should().BeTrue();
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ToResult_OnSuccessException_OnFailure_OnSuccess()
         {
             Result<string> result = Result<Offer>.ToResult(Repository.GetOffer(Const.OfferId))
@@ -141,7 +138,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Should().Be("Foo");
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ToResult_OnSuccess_OnNull()
         {
             Result<Customer> result = Result<Offer>.ToResult(Repository.GetOffer(Const.OfferWithNullCustomerId))
@@ -150,11 +147,11 @@ namespace RailwayResultTests.ResultTests
 
 
             result.IsSuccess.Should().BeTrue();
-            Assert.IsTrue(result.ReturnValue.GetType() == typeof(Customer));
+            Assert.True(result.ReturnValue.GetType() == typeof(Customer));
             result.ReturnValue.Name.Should().Be("Foobar");
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ToResult_OnSuccess_OnNull_OnSuccess()
         {
             Result<Product> result = Result<Offer>.ToResult(Repository.GetOffer(Const.OfferWithNullCustomerId))
@@ -164,10 +161,10 @@ namespace RailwayResultTests.ResultTests
 
 
             result.IsSuccess.Should().BeTrue();
-            Assert.IsTrue(result.ReturnValue.GetType() == typeof(Product));
+            Assert.True(result.ReturnValue.GetType() == typeof(Product));
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ToResult_OnSuccess_OnNull_OnSuccess_OnFailure()
         {
             Result<Product> result = Result<Offer>.ToResult(Repository.GetOffer(Const.OfferWithNullCustomerId))
@@ -178,11 +175,11 @@ namespace RailwayResultTests.ResultTests
 
 
             result.IsSuccess.Should().BeTrue();
-            Assert.IsTrue(result.ReturnValue.GetType() == typeof(Product));
+            Assert.True(result.ReturnValue.GetType() == typeof(Product));
             result.ReturnValue.Name.Should().Be("Bar");
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ToResult_OnSuccessException_OnNull_OnSuccess_OnFailure()
         {
             Result<Product> result = Result<Offer>.ToResult(Repository.GetOffer(Const.OfferWithNullCustomerId))
@@ -193,11 +190,11 @@ namespace RailwayResultTests.ResultTests
 
 
             result.IsSuccess.Should().BeTrue();
-            Assert.IsTrue(result.ReturnValue.GetType() == typeof(Product));
+            Assert.True(result.ReturnValue.GetType() == typeof(Product));
             result.ReturnValue.Name.Should().Be("zero");
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ToResult_OnSuccessException_OnNull_OnSuccess_OnException()
         {
             bool shouldBeFalse = false;
@@ -213,11 +210,11 @@ namespace RailwayResultTests.ResultTests
             shouldBeFalse.Should().BeFalse();
 
             result.IsSuccess.Should().BeTrue();
-            Assert.IsTrue(result.ReturnValue.GetType() == typeof(Product));
+            Assert.True(result.ReturnValue.GetType() == typeof(Product));
             result.ReturnValue.Name.Should().Be("zero");
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ToResult_OnSuccess_OnNull_OnSuccessFailure_OnException()
         {
             Result<Product> result = Result<Offer>.ToResult(Repository.GetOffer(Const.OfferWithNullCustomerId))
@@ -231,7 +228,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Should().BeNull();
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ToResult_OnSuccessException_OnNull_OnSuccess_OnException_OnFailure()
         {
             Result<Product> result = Result<Offer>.ToResult(Repository.GetOffer(Const.OfferWithNullCustomerId))
@@ -243,11 +240,11 @@ namespace RailwayResultTests.ResultTests
 
             // Expect Exception result
             result.IsSuccess.Should().BeTrue();
-            Assert.IsTrue(result.ReturnValue.GetType() == typeof(Product));
+            Assert.True(result.ReturnValue.GetType() == typeof(Product));
             result.ReturnValue.Name.Should().Be("zero");
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ToResult_OnSuccess_OnNull_OnSuccessFailure_OnException_OnFailure()
         {
             Result<Product> result = Result<Offer>.ToResult(Repository.GetOffer(Const.OfferWithNullCustomerId))
@@ -262,7 +259,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Name.Should().Be("none");
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ToResult_OnSuccess_OnNull_FinallyOrNull()
         {
             Customer result = Result<Offer>.ToResult(Repository.GetOffer(Const.OfferWithNullCustomerId))
@@ -274,7 +271,7 @@ namespace RailwayResultTests.ResultTests
             result.Name.Should().Be("Foobar");
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ToResult_OnSuccess_OnNull_FinallyOrThrow()
         {
             Customer result = Result<Offer>.ToResult(Repository.GetOffer(Const.OfferWithNullCustomerId))
@@ -286,7 +283,7 @@ namespace RailwayResultTests.ResultTests
             result.Name.Should().Be("Foobar");
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ToResult_OnSuccess_FinallyOrNull_ExpectNull()
         {
             Customer result = Result<Offer>.ToResult(Repository.GetOffer(Const.OfferWithNullCustomerId))
@@ -296,17 +293,16 @@ namespace RailwayResultTests.ResultTests
             result.Should().BeNull();
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ResultException))]
+        [Fact]
         public void Chaining_ToResult_OnSuccess_FinallyOrThrow_ShouldThrow()
         {
-            Customer result = Result<Offer>.ToResult(Repository.GetOffer(Const.OfferWithNullCustomerId))
+            Assert.Throws<ResultException>(()=> Result<Offer>.ToResult(Repository.GetOffer(Const.OfferWithNullCustomerId))
                 .OnSuccess(offer => Repository.GetCustomer(offer.CustomerId))
-                .FinallyOrThrow();
+                                           .FinallyOrThrow());
 
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ToResult_OnFailureAction()
         {
             Result<Offer> result = Result<Offer>.ToResult(
@@ -316,7 +312,7 @@ namespace RailwayResultTests.ResultTests
             result.IsFailure.Should().BeTrue();
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ToResult_OnSuccessTypeCustomer_OnSuccessTypeResultCustomer()
         {
             Result<Customer> result = Result<Offer>.ToResult(
@@ -327,7 +323,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Id.Should().Be(500);
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_Continue_SuccessResult()
         {
             Result<Customer> result = Result<Offer>.ToResult(
@@ -338,7 +334,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Name.Should().Be("Foo");
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_Continue_FailureResult()
         {
             Result<Customer> result = Result<Offer>.ToResult(
@@ -348,7 +344,7 @@ namespace RailwayResultTests.ResultTests
             result.IsSuccess.Should().BeFalse();
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ContinueOrError_ShouldFollowSuccesFlow()
         {
             Result<Customer> result = Result<Offer>.ToResult(
@@ -361,7 +357,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Name.Should().Be("Foo");
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ContinueOrError_ShouldFollowFailureFlow()
         {
             Result<Customer> result = Result<Offer>.ToResult(
@@ -374,7 +370,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Name.Should().Be("Bar");
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ContinueOrError_WhenUsingResultT()
         {
             Result<Customer> result = Result<Offer>.ToResult(
@@ -387,7 +383,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Name.Should().Be("Bar");
         }
 
-        [TestMethod]
+        [Fact]
         public void Chaining_ContinueOrError_WhenUsingAction()
         {
             string logOutput = string.Empty;

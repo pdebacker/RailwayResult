@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.ComponentModel;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RailwayResultTests.Examples;
 using Railway.Result2;
 using RailwayResultTests.StubDomain;
+using Xunit;
 
 namespace RailwayResultTests.Result2Tests
 {
@@ -17,10 +15,9 @@ namespace RailwayResultTests.Result2Tests
         ExceedLimit
     }
 
-    [TestClass]
     public class Result2Tests
     {
-        [TestMethod]
+        [Fact]
         public void Result2_OnSuccessBindTest()
         {
            var result = Result2<Order, string>.Succeeded(new Order());
@@ -30,7 +27,7 @@ namespace RailwayResultTests.Result2Tests
             result2.SuccessResult.GetType().Should().Be(typeof(Customer));
         }
 
-        [TestMethod]
+        [Fact]
         public void Result2_OnSuccessMapTest()
         {
             var result = Result2<Order, string>.Succeeded(new Order());
@@ -40,7 +37,7 @@ namespace RailwayResultTests.Result2Tests
             result2.SuccessResult.GetType().Should().Be(typeof(Customer));
         }
 
-        [TestMethod]
+        [Fact]
         public void Result2_OnSuccessActionTest()
         {
             Order orderResult = null;
@@ -52,7 +49,7 @@ namespace RailwayResultTests.Result2Tests
             orderResult.Id.Should().Be(123);
         }
 
-        [TestMethod]
+        [Fact]
         public void Result2_OnFailureActionTest()
         {
             string output = null;
@@ -63,7 +60,7 @@ namespace RailwayResultTests.Result2Tests
             output.Should().Be("ERROR");
         }
 
-        [TestMethod]
+        [Fact]
         public void Result2_GivenOnSuccessBind_WhenIsFailure_ExpectNoOperation()
         {
             var result = Result2<Order, string>.Failed("error");
@@ -74,7 +71,7 @@ namespace RailwayResultTests.Result2Tests
             result2.FailureResult.Should().Be("error");
         }
 
-        [TestMethod]
+        [Fact]
         public void Result2_GivenOnSuccesMap_WhenIsFailure_ExpectNoOperation()
         {
             var result = Result2<Order, string>.Failed("error");
@@ -85,7 +82,7 @@ namespace RailwayResultTests.Result2Tests
             result2.FailureResult.Should().Be("error");
         }
 
-        [TestMethod]
+        [Fact]
         public void Result2_GivenAFailure_WhenOnFailureMap_ExpectCorrectedSuccess()
         {
             var result = Result2<Order, string>.Failed("error");
@@ -96,7 +93,7 @@ namespace RailwayResultTests.Result2Tests
             result2.FailureResult.Should().BeNull();
         }
 
-        [TestMethod]
+        [Fact]
         public void Result2_GivenAFailure_WhenOnFailureBind_ExpectCorrectedSuccess()
         {
             var result = Result2<Order, string>.Failed("error");
@@ -107,7 +104,7 @@ namespace RailwayResultTests.Result2Tests
             result2.FailureResult.Should().BeNull();
         }
 
-        [TestMethod]
+        [Fact]
         public void Result2_GivenAFailure_WhenOnFailureBind_MapToOtherFailure()
         {
             var result = Result2<Order, string>.Failed("error");
@@ -118,7 +115,7 @@ namespace RailwayResultTests.Result2Tests
             result2.SuccessResult.Should().BeNull();
         }
 
-        [TestMethod]
+        [Fact]
         public void Result2_GivenAFailure_WhenOnFailureBind_BindToOtherFailure()
         {
             var result = Result2<Order, string>.Failed("error");
@@ -129,7 +126,7 @@ namespace RailwayResultTests.Result2Tests
             result2.SuccessResult.Should().BeNull();
         }
 
-        [TestMethod]
+        [Fact]
         public void Result2_GivenTwoDifferentFailureType_ConvertToOtherFailure()
         {
             // The code below will not return a Result2<Customer, int> on failure
@@ -150,7 +147,7 @@ namespace RailwayResultTests.Result2Tests
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Result2_GivenTwoDifferentFailureType_MapToOtherFailure()
         {
             // The code below will not return a Result2<Customer, int> on failure
@@ -172,7 +169,7 @@ namespace RailwayResultTests.Result2Tests
         }
 
 
-        [TestMethod]
+        [Fact]
         public void UpdateOrderExampleTest()
         {
             var ordersToProcess = GetTestOrderIds();

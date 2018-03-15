@@ -1,14 +1,13 @@
 ﻿using System;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Railway.Result;
+using Xunit;
 
 namespace RailwayResultTests.ResultTests
 {
-    [TestClass]
     public class SelectManyTests
     {
-        [TestMethod]
+        [Fact]
         public void SelectMany_ChainSuccess2x_ExpectSuccess()
         {
             var result = from a in BoolSuccess()
@@ -19,7 +18,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Should().Be(123);
         }
 
-        [TestMethod]
+        [Fact]
         public void SelectMany_ChainSuccess3x_ExpectSuccess()
         {
             var result = from a in BoolSuccess()
@@ -31,7 +30,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Should().Be("foo");
         }
 
-        [TestMethod]
+        [Fact]
         public void SelectMany_ChainSuccessAndFailureFirst_ExpectFailure()
         {
             var result = from a in BoolFailure()
@@ -42,7 +41,7 @@ namespace RailwayResultTests.ResultTests
             result.IsSuccess.Should().Be(false);
         }
 
-        [TestMethod]
+        [Fact]
         public void SelectMany_ChainSuccessAndFailureLast_ExpectFailure()
         {
             var result = from a in BoolSuccess()
@@ -60,7 +59,7 @@ namespace RailwayResultTests.ResultTests
 
         private Result<bool> BoolFailure()
         {
-            return Result<bool>.Failed(new ApplicationException("error"));
+            return Result<bool>.Failed(new Exception("error"));
         }
 
         private Result<int> IntSuccess()
@@ -75,7 +74,7 @@ namespace RailwayResultTests.ResultTests
 
         private Result<string> StringFailure()
         {
-            return Result<string>.Failed(new ApplicationException("error"));
+            return Result<string>.Failed(new Exception("error"));
         }
     }
 }

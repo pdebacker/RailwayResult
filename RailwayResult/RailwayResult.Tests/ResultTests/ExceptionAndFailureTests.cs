@@ -1,16 +1,15 @@
 ﻿using System;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RailwayResultTests.Examples;
 using Railway.Result;
 using RailwayResultTests.StubDomain;
+using Xunit;
 
 namespace RailwayResultTests.ResultTests
 {
-    [TestClass]
     public class ExceptionAndFailureTests
     {
-        [TestMethod]
+        [Fact]
         public void WhenReturnTypeIsNotBool_CannotUseFailure()
         {
             // This will not compile:
@@ -25,7 +24,7 @@ namespace RailwayResultTests.ResultTests
             // And a Null is not a valid result.
         }
 
-        [TestMethod]
+        [Fact]
         public void WhenReturnTypeIsNotBool_ExcpectANullValueToBeAFailure()
         {
             // And a Null is considered a failure result:
@@ -38,17 +37,16 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Should().BeNull();
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ApplicationException))]
+        [Fact]
         public void WhenMethodThrows_ExpectException()
         {
-            var result = Result<Order>.ToResult(ThrowsExceptionDirectly());
+            Assert.Throws<Exception>(()=>Result<Order>.ToResult(ThrowsExceptionDirectly()));
 
             // To catch the exception and retun a failure result use a lamda function: 
             // Result<Order>.ToResult( () => ThrowsExceptionDirectly());
         }
 
-        [TestMethod]
+        [Fact]
         public void WhenFuncThrows_ExpectFailureResultWithException()
         {
             // To catch the exception and retun a failure result use a lamda function: 
@@ -60,7 +58,7 @@ namespace RailwayResultTests.ResultTests
             result.FailureInfo.Ex.Should().NotBeNull();
         }
 
-        [TestMethod]
+        [Fact]
         public void WhenIndirectException_ExpectTraceWithFailureLocation()
         {
             var result = Result<Order>.ToResult(ThrowsExceptionIndirectly);
@@ -71,7 +69,7 @@ namespace RailwayResultTests.ResultTests
             result.FailureInfo.Ex.Should().NotBeNull();
         }
 
-        [TestMethod]
+        [Fact]
         public void WhenFailure_ExpectTraceWithFailureLocation()
         {
             var result = Result<Order>.ToResult(() => ReturnsNullOrderResult());
@@ -82,7 +80,7 @@ namespace RailwayResultTests.ResultTests
             result.IsFailure.Should().BeTrue();
         }
 
-        [TestMethod]
+        [Fact]
         public void WhenOrderFailure_ExpectFailedResult()
         {
             var result = Result<Order>.ToResult(ReturnsFailedOrderResult());
@@ -93,7 +91,7 @@ namespace RailwayResultTests.ResultTests
         }
 
 
-        [TestMethod]
+        [Fact]
         public void WhenExceptionIsThrowed_ExcecuteOnExceptionThatReturnsTypeT()
         {
             var result = Result<Order>.ToResult(() => Repository.GetOrder(Const.ExceptionOrderId))
@@ -104,7 +102,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Id.Should().Be(Const.OrderId);
         }
 
-        [TestMethod]
+        [Fact]
         public void WhenExceptionIsThrowed_ExcecuteOnExceptionThatReturnsTypeResultT()
         {
             var result = Result<Order>.ToResult(() => Repository.GetOrder(Const.ExceptionOrderId))
@@ -115,7 +113,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Id.Should().Be(Const.OrderId);
         }
 
-        [TestMethod]
+        [Fact]
         public void WhenExceptionIsThrowed_ExcecuteOnExceptionAction()
         {
             bool actionIsExcuted = false;
@@ -126,7 +124,7 @@ namespace RailwayResultTests.ResultTests
             actionIsExcuted.Should().Be(true);
         }
 
-        [TestMethod]
+        [Fact]
         public void GivenExceptionIsThrowed_WhenExceptionIsRepositoryException_ExcecuteOnException()
         {
             var result = Result<Order>.ToResult(() => Repository.GetOrder(Const.ExceptionOrderId))
@@ -137,7 +135,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Id.Should().Be(Const.OrderId);
         }
 
-        [TestMethod]
+        [Fact]
         public void GivenExceptionIsThrowed_WhenExceptionIsNotRepositoryException_NotExcecuteOnException()
         {
             var result = Result<Order>.ToResult(() => Repository.GetOrder(Const.ExceptionOrderId))
@@ -147,25 +145,14 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Should().BeNull();
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(Repository.RepositoryException))]
+        [Fact]
         public void GivenExceptionIsThrowed_WhenThrowFinally_ExpectException()
         {
-            var result = Result<Order>.ToResult(() => Repository.GetOrder(Const.ExceptionOrderId))
-                .OnSuccess(order => Repository.GetCustomer(Const.CustomerId)) // this is not executed
-                .ThrowOnException();
+            Assert.Throws<Repository.RepositoryException>(() => Result<Order>.ToResult(() => Repository.GetOrder(Const.ExceptionOrderId))
+                                                          .OnSuccess(order => Repository.GetCustomer(Const.CustomerId)).ThrowOnException());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ResultException))]
-        public void GivenAFailure_WhenThrowFinally_ExpectException()
-        {
-            var result = Result<Order>.ToResult(() => Repository.GetOrder(Const.ExceptionOrderId))
-                .OnSuccess(order => Repository.GetCustomer(Const.CustomerId)) // this is not executed
-                .ThrowOnFailure();
-        }
-
-        [TestMethod]
+        [Fact]
         public void GivenASuccess_WhenThrowFinally_NotExpectException()
         {
             var result = Result<Order>.ToResult(() => Repository.GetOrder(Const.OrderId))
@@ -177,7 +164,7 @@ namespace RailwayResultTests.ResultTests
 
         private Order ThrowsExceptionDirectly()
         {
-            throw new ApplicationException("exception test message");
+            throw new Exception("exception test message");
         }
 
         private Order ThrowsExceptionIndirectly()

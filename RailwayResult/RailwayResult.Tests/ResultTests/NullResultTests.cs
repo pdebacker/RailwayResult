@@ -1,15 +1,13 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RailwayResultTests.Examples;
 using Railway.Result;
 using RailwayResultTests.StubDomain;
+using Xunit;
 
 namespace RailwayResultTests.ResultTests
 {
-    [TestClass]
     public class NullResultTests
     {
-        [TestMethod]
+        [Fact]
         public void WhenConstructedWithNull_ThenExpectFailure()
         {
             var result = Result<string>.ToResult((string)null);
@@ -17,7 +15,7 @@ namespace RailwayResultTests.ResultTests
             result.IsNull.Should().Be(true);
         }
 
-        [TestMethod]
+        [Fact]
         public void GivenNullFailure_WhenNullDelegate_ThenExpectExecution()
         {
             Result<string> result = 
@@ -27,7 +25,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Should().Be("bar");
         }
 
-        [TestMethod]
+        [Fact]
         public void GivenNotNullFailure_WhenNullDelegate_ThenNotExpectExecution()
         {
             Result<string> result =
@@ -36,7 +34,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Should().Be("foo");
         }
 
-        [TestMethod]
+        [Fact]
         public void GivenNotCustomer_WhenNullDelegate_ExpectNewCustomer()
         {
             Result<Customer> result =
@@ -45,7 +43,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Name.Should().Be("Bar");
         }
 
-        [TestMethod]
+        [Fact]
         public void GivenCustomerException_WhenNullDelegate_ExpectFailure()
         {
             Result<Customer> result =
@@ -57,7 +55,7 @@ namespace RailwayResultTests.ResultTests
             result.ReturnValue.Should().BeNull();
         }
 
-        [TestMethod]
+        [Fact]
         public void GivenCustomerResult_WhenNullDelegate_ExpectSkipDelegate()
         {
             Result<Customer> result =

@@ -148,13 +148,13 @@ namespace RailwayResultTests.StubDomain
         {
             switch (name)
             {
-                case "EX": throw new ApplicationException("GetMailTemplate exception");
+                case "EX": throw new Exception("GetMailTemplate exception");
                 case "NULL": return null;
             }
             return "Dear {0}, we have started processing your order. The estimated shipping date is {1}.";
         }
 
-        public class RepositoryException : ApplicationException
+        public class RepositoryException : Exception
         {
             public RepositoryException(string message) : base(message)
             {

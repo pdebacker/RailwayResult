@@ -2,24 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Railway.Result;
 using RailwayResultTests.StubDomain;
+using Xunit;
 
 namespace RailwayResultTests.Examples.UpdateOrder
 {
-    [TestClass]
     public class WithResultTMonad_2
     {
-        [TestInitialize]
-        public void TestSetup()
+        public WithResultTMonad_2()
         {
             //var simpleLogger = new SimpleLogger(@"c:\tmp\log.txt");
             //simpleLogger.ClearLog();
             //ResultLogger.Logger = simpleLogger;
         }
 
-        [TestMethod]
+        [Fact]
         public void AddProductToCustomerOrder_2()
         {
             var ordersToProcess = TestSupport.GetTestOrderIds();

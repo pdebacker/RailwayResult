@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Railway.Result;
 using RailwayResultTests.StubDomain;
+using Xunit;
 
 namespace RailwayResultTests.Examples.Various
 {
-    [TestClass]
     public class UpdateCustomerEmail
     {
-        [TestInitialize]
-        public void TestSetup()
+        public UpdateCustomerEmail()
         {
             //var simpleLogger = new SimpleLogger(@"c:\tmp\log.txt");
             //simpleLogger.ClearLog();
@@ -19,7 +17,7 @@ namespace RailwayResultTests.Examples.Various
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Example_UpdateCustomerWithNewEmail()
         {
             UpdateEmailAddress(Const.CustomerId, "valid@mail.com").Should().BeTrue();
