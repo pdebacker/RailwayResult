@@ -82,6 +82,11 @@ namespace Railway.Result
                 return Failed(ex, ex.Message, b);
             }
         }
+        public static Result<TReturn> Succeeded(TReturn value)
+        {
+            return new Result<TReturn>(value, typeof(TReturn));
+        }
+
         public static Result<bool> Succeeded()
         {
             return new Result<bool>(true, typeof(bool));
