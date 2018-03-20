@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>RailwayResult</id>
+        <version>##version##</version>
+        <title>Railway Result paard</title>
+        <authors>Peter de Backer</authors>
+        <owners>Peter</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Enter coin here</description>
+        <tags></tags>
+    </metadata>
+
+    <files>
+        <file src="RailwayResult/bin/##buildtype##/netstandard1.6/*" target="lib/netstandard1.6/" />
+    </files>
+  </package>
+
+
