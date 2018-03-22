@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>RailwayResult</id>
+    <version>0.9.0</version>
+    <title>RailwayResult</title>
+    <authors>Peter de Backer</authors>
+    <owners>Peter de Backer</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/pdebacker/RailwayResult/blob/master/License.md</licenseUrl>
+    <projectUrl>https://github.com/pdebacker/RailwayResult</projectUrl>
+    <description>Railway programming with Monads and c#</description>
+    <tags>Monads, c#</tags>
+  </metadata>
+  <files>
+    <file src="lib\RailwayResult.dll" target="lib\RailwayResult.dll" />
+  </files>
+</package>
