@@ -29,7 +29,6 @@
     <Folder Include="Examples\" />
     <Folder Include="Result2Tests\" />
     <Folder Include="ResultErrorTests\" />
-    <Folder Include="ResultTests\" />
     <Folder Include="StubDomain\" />
   </ItemGroup>
   <ItemGroup>

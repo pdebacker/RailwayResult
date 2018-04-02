@@ -6,6 +6,12 @@ namespace Railway.Result
 {
     public class Result<TReturn> : IEnumerable<Result<TReturn>>
     {
+        private Result()
+        {
+            ReturnValue = default(TReturn);
+            _failureInfo = new ResultFailure(typeof(TReturn));
+            IsSuccess = false;
+        }
         private Result(TReturn returnValue, Type returnType)
         {
             ReturnValue = returnValue;
@@ -115,6 +121,10 @@ namespace Railway.Result
             }
         }
 
+        public static Result<TReturn> NullFailure()
+        {
+            return new Result<TReturn>();
+        }
         public static Result<TReturn> Failed(string message)
         {
             return new Result<TReturn>(new ResultFailure(typeof(TReturn), message));

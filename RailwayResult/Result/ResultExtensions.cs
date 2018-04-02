@@ -399,6 +399,132 @@ namespace Railway.Result
             }
         }
         #endregion Continue
+
+        #region Ensure
+        public static Result<TReturn> Ensure<TReturn>(
+            this TReturn result)
+        {
+            if (result != null)
+                return result.ToResult();
+
+            return Result<TReturn>.NullFailure();
+        }
+        public static Result<TReturn> Ensure<TReturn>(
+            this Result<TReturn> result,
+            Func<TReturn, bool> predicate)
+        {
+            try
+            {
+                if (result.IsFailure)
+                    return Result<TReturn>.Failed(result.FailureInfo);
+
+                if (predicate(result.ReturnValue))
+                    return result;
+
+                return Result<TReturn>.Failed(-1, "Not Ensured");
+            }
+            catch (Exception ex)
+            {
+                return Result<TReturn>.Failed(ex, ex.Message, result);
+            }
+        }
+        public static Result<TReturn> Ensure<TReturn>(
+            this Result<TReturn> result,
+            Func<TReturn, Result<bool>> predicate)
+        {
+            try
+            {
+                if (result.IsFailure)
+                {
+                    return Result<TReturn>.Failed(result.FailureInfo);
+                }
+
+                var resultValue = predicate(result.ReturnValue);
+                if (resultValue.IsSuccess)
+                {
+                    return result;
+                }
+
+                return Result<TReturn>.Failed(resultValue.FailureInfo);
+            }
+            catch (Exception ex)
+            {
+                return Result<TReturn>.Failed(ex, ex.Message, result);
+            }
+        }
+
+
+        public static Result<TReturn> Ensure<TReturn, T1>(
+            this Result<TReturn> result,
+            Result<T1> r1)
+        {
+            try
+            {
+                if (result.IsFailure)
+                    return result;
+
+                if (r1.IsFailure)
+                    return Result<TReturn>.Failed(r1.FailureInfo);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return Result<TReturn>.Failed(ex, ex.Message, result);
+            }
+        }
+        public static Result<TReturn> Ensure<TReturn, T1, T2>(
+            this Result<TReturn> result,
+            Result<T1> r1,
+            Result<T2> r2)
+        {
+            try
+            {
+                if (result.IsFailure)
+                    return result;
+
+                if (r1.IsFailure)
+                    return Result<TReturn>.Failed(r1.FailureInfo);
+
+                if (r2.IsFailure)
+                    return Result<TReturn>.Failed(r2.FailureInfo);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return Result<TReturn>.Failed(ex, ex.Message, result);
+            }
+        }
+
+        public static Result<TReturn> Ensure<TReturn, T1, T2, T3>(
+            this Result<TReturn> result,
+            Result<T1> r1,
+            Result<T2> r2,
+            Result<T3> r3)
+        {
+            try
+            {
+                if (result.IsFailure)
+                    return result;
+
+                if (r1.IsFailure)
+                    return Result<TReturn>.Failed(r1.FailureInfo);
+
+                if (r2.IsFailure)
+                    return Result<TReturn>.Failed(r2.FailureInfo);
+
+                if (r3.IsFailure)
+                    return Result<TReturn>.Failed(r3.FailureInfo);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return Result<TReturn>.Failed(ex, ex.Message, result);
+            }
+        }
+        #endregion
         #region OnNull
         public static Result<TReturn> OnNull<TReturn>(this Result<TReturn> result,
             Func<ResultFailure, Result<TReturn>> evaluator)
