@@ -19,16 +19,18 @@ namespace RailwayResultTests.Examples.ProcessOrders
 
             foreach (var orderId in ordersToProcess)
             {
-                Order orderResult = null;
-                Customer customerResult = null;
+                Result<Order> orderResult = Result<Order>
+                    .ToResult(() => Repository.GetOrder(orderId));
 
-                var result = Result<Order>.ToResult(() => orderResult = Repository.GetOrder(orderId))
-                    .OnSuccess(order => customerResult = Repository.GetCustomer(order.CustomerId))
+                Result<Customer> customerResult =
+                    orderResult.OnSuccess(order => Repository.GetCustomer(order.CustomerId));
+
+                var result = customerResult
                     .OnSuccess(customer => ErpProcessOrder(orderResult))
                     .OnSuccess(shippingInfo => UpdateOrderAndInformCustomer(
-                        orderResult, 
-                        customerResult, 
-                        shippingInfo, 
+                        orderResult,
+                        customerResult,
+                        shippingInfo,
                         failedOrders));
 
 

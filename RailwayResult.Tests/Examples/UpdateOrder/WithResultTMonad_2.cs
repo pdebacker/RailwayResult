@@ -42,20 +42,36 @@ namespace RailwayResultTests.Examples.UpdateOrder
         // This test will run a series or test order and asserts the outcome.
         public OrderUpdateResult UpdateOrder(int orderId, int productId)
         {
-            Product product = null;
-            Order order = null;
-            Customer customer = null;
+            Result<Product> productResult = GetProduct(productId);
+            Result<Order> orderResult = GetOrder(orderId);
 
-            return Result<Product>.ToResult(() => product = Repository.GetProduct(productId))
-                .OnSuccess(p => order = Repository.GetOrder(orderId))
-                .OnSuccess(o => customer = Repository.GetCustomer(order.CustomerId))
-                .OnSuccess(c => AddProductToCustomerOrder(order, customer, product))
-                .ContinueIf( 
-                        r => r == OrderUpdateResult.OK,
-                        _ => Repository.UpdateOrder(order).ToResult().OnSuccess(s => OrderUpdateResult.OK)
-                    )
+            var result = productResult
+                .Ensure(orderResult)
+                .OnSuccess(_ => GetCustomer(orderResult.ReturnValue.CustomerId))
+                .OnSuccess(customerResult => AddProductToCustomerOrder(orderResult, customerResult, productResult))
+                .ContinueIf(
+                    r => r == OrderUpdateResult.OK,
+                    _ => Repository.UpdateOrder(orderResult).ToResult()
+                        .OnSuccess(s => OrderUpdateResult.OK)
+                )
                 .OnFailure(err => OrderUpdateResult.Error)
                 .FinallyOrThrow();
+
+            return result;
+        }
+        private Result<Product> GetProduct(int productId)
+        {
+            return Result<Product>.ToResult(() => Repository.GetProduct(productId));
+        }
+
+        private Result<Order> GetOrder(int orderId)
+        {
+            return Result<Order>.ToResult(() => Repository.GetOrder(orderId));
+        }
+
+        private Result<Customer> GetCustomer(int customerId)
+        {
+            return Result<Customer>.ToResult(() => Repository.GetCustomer(customerId));
         }
 
         private Result<OrderUpdateResult> AddProductToCustomerOrder(
