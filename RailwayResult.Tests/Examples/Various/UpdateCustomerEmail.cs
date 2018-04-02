@@ -31,21 +31,20 @@ namespace RailwayResultTests.Examples.Various
 
         private bool UpdateEmailAddress(int customerId, string newEmailAddress)
         {
-            Customer customer = null;
-            string oldEmail = null;
-
-            bool success = 
-                ValidateEmail(newEmailAddress)
+            bool success = ValidateEmail(newEmailAddress)
                 .OnSuccess(_ => GetCustomer(customerId))
-                .OnSuccess(result => customer = result)                                             // set customer scope
-                .OnSuccess(result => oldEmail = customer.EmailAddress)                              // set customer scope
-                .OnSuccess(_ => Repository.UpdateCustomer(customer).FromBool())                     // better to let repository return a Result<bool> type
-                .OnSuccess(_ => customer.EmailAddress = newEmailAddress)
-                .OnSuccess(_ => SendMailChangeVerification(customer.EmailAddress, customer))        // send confirmation to new email address.
-                .OnSuccess(_ => SendMailChangeVerification(oldEmail, customer))                     // inform customer on old email address.
-                .OnSuccess(_ => Logger.LogMessage("..."))                                           // action, returns void
-                .OnFailure(_ => false)                                                              // cast any failure to false
-                .FinallyOrThrow();                                                                  // will never throw
+                .OnSuccess(customer =>
+                {
+                    string oldEmail = customer.EmailAddress;
+                    customer.EmailAddress = newEmailAddress;
+
+                    return Repository.UpdateCustomer(customer).FromBool()                            // better to let repository return a Result<bool> type
+                        .OnSuccess(_ => SendMailChangeVerification(customer.EmailAddress, customer)) // send confirmation to new email address.
+                        .OnSuccess(_ => SendMailChangeVerification(oldEmail, customer))              // inform customer on old email address.
+                        .OnSuccess(_ => Logger.LogMessage("..."));                                   // action, returns void
+                })
+                .OnFailure(_ => false)                                                               // cast any failure to false
+                .FinallyOrThrow();
 
             return success;
         }
