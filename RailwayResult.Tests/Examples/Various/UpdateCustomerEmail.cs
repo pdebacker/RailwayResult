@@ -14,6 +14,7 @@ namespace RailwayResultTests.Examples.Various
             //var simpleLogger = new SimpleLogger(@"c:\tmp\log.txt");
             //simpleLogger.ClearLog();
             //ResultLogger.Logger = simpleLogger;
+            ResultLogger.ImplicitLoggingLevel = ResultLoggerLevel.None;
         }
 
 
@@ -43,6 +44,7 @@ namespace RailwayResultTests.Examples.Various
                         .OnSuccess(_ => SendMailChangeVerification(oldEmail, customer))              // inform customer on old email address.
                         .OnSuccess(_ => Logger.LogMessage("..."));                                   // action, returns void
                 })
+                .LogFailure("custom message...")                                                     // Explicit failure logging
                 .OnFailure(_ => false)                                                               // cast any failure to false
                 .FinallyOrThrow();
 

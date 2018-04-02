@@ -399,7 +399,6 @@ namespace Railway.Result
             }
         }
         #endregion Continue
-
         #region Ensure
         public static Result<TReturn> Ensure<TReturn>(
             this TReturn result)
@@ -597,5 +596,41 @@ namespace Railway.Result
             return result;
         }
         #endregion Finally
+        #region Logging
+        public static Result<TReturn> LogFailure<TReturn>(this Result<TReturn> result)
+        {
+            try
+            {
+                if (result.IsFailure && ResultLogger.Logger != null)
+                {
+                    ResultLogger.Logger.LogFailure(result.FailureInfo);
+                }
+            }
+            catch
+            {
+                // do not fail on failed logging
+            }
+
+            return result;
+        }
+        public static Result<TReturn> LogFailure<TReturn>(this Result<TReturn> result,
+            string message)
+        {
+            try
+            {
+                if (result.IsFailure && ResultLogger.Logger != null)
+                {
+                    result.AddFailure(message);
+                    ResultLogger.Logger.LogFailure(result.FailureInfo);
+                }
+            }
+            catch
+            {
+                // do not fail on failed logging
+            }
+
+            return result;
+        }
+        #endregion
     }
 }

@@ -148,7 +148,20 @@ namespace Railway.Result
             {
                 if (ResultLogger.Logger != null)
                 {
-                    ResultLogger.Logger.LogFailure(this);
+                    if (ResultLogger.ImplicitLoggingLevel == ResultLoggerLevel.All)
+                    {
+                        ResultLogger.Logger.LogFailure(this);
+                    }
+                    else if (ResultLogger.ImplicitLoggingLevel == ResultLoggerLevel.OnlyExceptionsAndNull &&
+                             (this.IsNull || this.Ex != null))
+                    {
+                        ResultLogger.Logger.LogFailure(this);
+                    }
+                    else if (ResultLogger.ImplicitLoggingLevel == ResultLoggerLevel.OnlyExceptions &&
+                             this.Ex != null)
+                    {
+                        ResultLogger.Logger.LogFailure(this);
+                    }
                 }
             }
             catch
