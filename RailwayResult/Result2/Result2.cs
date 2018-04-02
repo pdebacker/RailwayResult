@@ -41,7 +41,15 @@ namespace Railway.Result2
             };
         }
 
+        public static implicit operator Result2<TSuccess, TFailure>(TSuccess result) => Succeeded(result);
 
+        public static implicit operator TSuccess(Result2<TSuccess, TFailure> result)
+        {
+            if (result.IsFailure)
+                throw new InvalidOperationException("Cannot cast TFailure to TSuccess");
+
+            return result.SuccessResult;
+        }
     }
 
 }

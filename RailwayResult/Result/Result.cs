@@ -144,6 +144,15 @@ namespace Railway.Result
             return new Result<TReturn>(failureInfo, instance);
         }
 
+        public static implicit operator Result<TReturn>(TReturn result) => result.ToResult();
+
+        public static implicit operator TReturn(Result<TReturn> result)
+        {
+            if (result.IsFailure)
+                throw new ResultException(result.FailureInfo);
+
+            return result.ReturnValue;
+        }
         public override string ToString()
         {
             if (IsSuccess)
