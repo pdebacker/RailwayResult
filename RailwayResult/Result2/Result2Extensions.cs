@@ -106,15 +106,15 @@ namespace Railway.Result2
             Func<TSuccess, Result2<TOut, TFailure>> onsucces,
             Func<TFailure, Result2<TOut, TFailure>> onfailure)
         {
-            if (onsucces==null)
-                throw  new ArgumentNullException(nameof(onsucces));
+            if (onsucces == null)
+                throw new ArgumentNullException(nameof(onsucces));
             if (onfailure == null)
                 throw new ArgumentNullException(nameof(onfailure));
 
             if (result.IsSuccess)
                 return result.OnSuccess(onsucces);
-            
-                return onfailure(result.FailureResult);
+
+            return onfailure(result.FailureResult);
         }
 
         public static Result2<TOut, TFailure> Continue<TSuccess, TOut, TFailure>(
@@ -164,11 +164,10 @@ namespace Railway.Result2
             return elseFunc(input.SuccessResult);
         }
         #endregion
-
         #region Linq
         // SelectMany must have the following signature:
         //   Result<C> SelectMany<A, B, C>(this Result<A> a, Func<A, Result<B>> func, Func<A, B, C> select)
-        public static Result2<TOut,TFailure> SelectMany<TReturnA, TReturnB, TOut, TFailure>(
+        public static Result2<TOut, TFailure> SelectMany<TReturnA, TReturnB, TOut, TFailure>(
             this Result2<TReturnA, TFailure> self,
             Func<TReturnA, Result2<TReturnB, TFailure>> func,
             Func<TReturnA, TReturnB, TOut> select)
@@ -177,7 +176,7 @@ namespace Railway.Result2
             {
                 var result = func(self.SuccessResult);
                 if (result.IsSuccess)
-                    return Result2<TOut, TFailure>.Succeeded(select(self.SuccessResult, result.SuccessResult)); 
+                    return Result2<TOut, TFailure>.Succeeded(select(self.SuccessResult, result.SuccessResult));
                 return Result2<TOut, TFailure>.Failed(result.FailureResult);
             }
             return Result2<TOut, TFailure>.Failed(self.FailureResult);
@@ -195,6 +194,66 @@ namespace Railway.Result2
         }
 
         #endregion Linq
+        #region Ensure
+        public static Result2<TSuccess, TFailure> Ensure<TSuccess, TFailure>(
+            this TSuccess result)
+        {
+            if (result != null)
+                return Result2<TSuccess, TFailure>.Succeeded(result);
 
+            return Result2<TSuccess, TFailure>.Failed(default(TFailure));
+        }
+        
+        public static Result2<TSuccess, TFailure> Ensure<TSuccess, T1, TFailure>(
+            this Result2<TSuccess, TFailure> result,
+            Result2<T1, TFailure> r1)
+        {
+                if (result.IsFailure)
+                    return result;
+
+                if (r1.IsFailure)
+                    return Result2<TSuccess,TFailure>.Failed(r1.FailureResult);
+
+                return result;
+        }
+
+        public static Result2<TSuccess, TFailure> Ensure<TSuccess, T1, T2, TFailure>(
+            this Result2<TSuccess, TFailure> result,
+            Result2<T1, TFailure> r1,
+            Result2<T1, TFailure> r2)
+        {
+            if (result.IsFailure)
+                return result;
+
+            if (r1.IsFailure)
+                return Result2<TSuccess, TFailure>.Failed(r1.FailureResult);
+
+            if (r2.IsFailure)
+                return Result2<TSuccess, TFailure>.Failed(r2.FailureResult);
+
+            return result;
+        }
+
+        public static Result2<TSuccess, TFailure> Ensure<TSuccess, T1, T2, TFailure>(
+            this Result2<TSuccess, TFailure> result,
+            Result2<T1, TFailure> r1,
+            Result2<T1, TFailure> r2,
+            Result2<T1, TFailure> r3)
+        {
+            if (result.IsFailure)
+                return result;
+
+            if (r1.IsFailure)
+                return Result2<TSuccess, TFailure>.Failed(r1.FailureResult);
+
+            if (r2.IsFailure)
+                return Result2<TSuccess, TFailure>.Failed(r2.FailureResult);
+
+            if (r3.IsFailure)
+                return Result2<TSuccess, TFailure>.Failed(r3.FailureResult);
+
+            return result;
+        }
+        #endregion
     }
 }
